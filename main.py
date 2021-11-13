@@ -19,6 +19,10 @@ class CharacterCreator:
         self.position_x_last = self.position_x
         self.position_y_last = self.position_y
         self.width = width
+        self.check_left = False
+        self.check_right = False
+        self.check_top = False
+        self.check_bottom = False
 
     def draw_object(self):
         square = pygame.Rect(self.position_x - self.width // 2, self.position_y - self.width // 2,
@@ -27,38 +31,46 @@ class CharacterCreator:
 
     def move(self, direction):
         for i in range(0, len(array_of_borders)):
-            if array_of_borders[i][0] <= self.position_x - self.width // 2 <= array_of_borders[i][2]:     # left
-                if array_of_borders[i][1] <= self.position_y <= array_of_borders[i][3]:
-                    self.position_x = self.position_x_last
-                    self.position_y = self.position_y_last
-                    return
-            if array_of_borders[i][0] <= self.position_x + self.width // 2 <= array_of_borders[i][2]:     # right
-                if array_of_borders[i][1] <= self.position_y <= array_of_borders[i][3]:
-                    self.position_x = self.position_x_last
-                    self.position_y = self.position_y_last
-                    return
-            if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
-                if array_of_borders[i][1] <= self.position_y + self.width // 2 <= array_of_borders[i][3]:   # bottom
-                    self.position_x = self.position_x_last
-                    self.position_y = self.position_y_last
-                    return
-            if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
-                if array_of_borders[i][1] <= self.position_y - self.width // 2 <= array_of_borders[i][3]:    # top
-                    self.position_x = self.position_x_last
-                    self.position_y = self.position_y_last
-                    return
-        if direction == 'top':
-            self.position_y_last = self.position_y
+            if self.check_left is False:
+                if array_of_borders[i][0] <= self.position_x - self.width // 2 <= array_of_borders[i][2]:     # left
+                    if array_of_borders[i][1] <= self.position_y <= array_of_borders[i][3]:
+                        self.check_left = True
+                        return
+            if self.check_right is False:
+                if array_of_borders[i][0] <= self.position_x + self.width // 2 <= array_of_borders[i][2]:     # right
+                    if array_of_borders[i][1] <= self.position_y <= array_of_borders[i][3]:
+                        self.check_right = True
+                        return
+            if self.check_bottom is False:
+                if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
+                    if array_of_borders[i][1] <= self.position_y + self.width // 2 <= array_of_borders[i][3]:   # bottom
+                        self.check_bottom = True
+                        return
+            if self.check_top is False:
+                if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
+                    if array_of_borders[i][1] <= self.position_y - self.width // 2 <= array_of_borders[i][3]:    # top
+                        self.check_top = True
+                        return
+        if direction == 'top' and self.check_top is False:
             self.position_y -= 5
-        if direction == 'bottom':
-            self.position_y_last = self.position_y
+            self.check_bottom = False
+            self.check_left = False
+            self.check_right = False
+        if direction == 'bottom' and self.check_bottom is False:
             self.position_y += 5
-        if direction == 'left':
-            self.position_x_last = self.position_x
+            self.check_top = False
+            self.check_left = False
+            self.check_right = False
+        if direction == 'left' and self.check_left is False:
             self.position_x -= 5
-        if direction == 'right':
-            self.position_x_last = self.position_x
+            self.check_bottom = False
+            self.check_top = False
+            self.check_right = False
+        if direction == 'right' and self.check_right is False:
             self.position_x += 5
+            self.check_bottom = False
+            self.check_left = False
+            self.check_top = False
 
 
 class BordersCreator:
