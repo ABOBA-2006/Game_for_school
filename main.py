@@ -27,8 +27,23 @@ class CharacterCreator:
 
     def move(self, direction):
         for i in range(0, len(array_of_borders)):
-            if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
+            if array_of_borders[i][0] <= self.position_x - self.width // 2 <= array_of_borders[i][2]:     # left
                 if array_of_borders[i][1] <= self.position_y <= array_of_borders[i][3]:
+                    self.position_x = self.position_x_last
+                    self.position_y = self.position_y_last
+                    return
+            if array_of_borders[i][0] <= self.position_x + self.width // 2 <= array_of_borders[i][2]:     # right
+                if array_of_borders[i][1] <= self.position_y <= array_of_borders[i][3]:
+                    self.position_x = self.position_x_last
+                    self.position_y = self.position_y_last
+                    return
+            if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
+                if array_of_borders[i][1] <= self.position_y + self.width // 2 <= array_of_borders[i][3]:   # bottom
+                    self.position_x = self.position_x_last
+                    self.position_y = self.position_y_last
+                    return
+            if array_of_borders[i][0] <= self.position_x <= array_of_borders[i][2]:
+                if array_of_borders[i][1] <= self.position_y - self.width // 2 <= array_of_borders[i][3]:    # top
                     self.position_x = self.position_x_last
                     self.position_y = self.position_y_last
                     return
