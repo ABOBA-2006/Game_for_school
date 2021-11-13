@@ -7,11 +7,6 @@ clock = pygame.time.Clock()
 array_of_borders = []
 
 
-def create_background():
-    square = pygame.Rect(0, 0, 1040, 680)
-    pygame.draw.rect(screen, (99, 99, 99), square, 0)
-
-
 class CharacterCreator:
     def __init__(self, start_position, width):
         self.position_x = start_position[0]
@@ -46,22 +41,22 @@ class CharacterCreator:
                 if array_of_borders[i][1] <= self.position_y - self.width // 2 <= array_of_borders[i][3]:    # top
                     self.check_top = True
         if self.direction == 'top' and self.check_top is False:
-            self.position_y -= 1
+            self.position_y -= 5
             self.check_bottom = False
             self.check_left = False
             self.check_right = False
         if self.direction == 'bottom' and self.check_bottom is False:
-            self.position_y += 1
+            self.position_y += 5
             self.check_top = False
             self.check_left = False
             self.check_right = False
         if self.direction == 'left' and self.check_left is False:
-            self.position_x -= 1
+            self.position_x -= 5
             self.check_bottom = False
             self.check_top = False
             self.check_right = False
         if self.direction == 'right' and self.check_right is False:
-            self.position_x += 1
+            self.position_x += 5
             self.check_bottom = False
             self.check_left = False
             self.check_top = False
@@ -90,26 +85,27 @@ third_border = BordersCreator([520, 25], 1040, 50)
 forth_border = BordersCreator([520, 655], 1040, 50)
 
 while True:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
             sys.exit()
 
-        main_character.move()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w:
-                main_character.change_direction('top')
-            if event.key == pygame.K_s:
-                main_character.change_direction('bottom')
-            if event.key == pygame.K_a:
-                main_character.change_direction('left')
-            if event.key == pygame.K_d:
-                main_character.change_direction('right')
+    main_character.move()
 
-    create_background()
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        main_character.change_direction('top')
+    elif keys[pygame.K_s]:
+        main_character.change_direction('bottom')
+    elif keys[pygame.K_a]:
+        main_character.change_direction('left')
+    elif keys[pygame.K_d]:
+        main_character.change_direction('right')
+
+    screen.fill([99, 99, 99])
     main_character.draw_object()
     first_border.draw_object()
     second_border.draw_object()
     third_border.draw_object()
     forth_border.draw_object()
-    pygame.display.update()
+    pygame.display.flip()
