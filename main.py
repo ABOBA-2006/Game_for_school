@@ -1,5 +1,4 @@
 import sys
-import time
 import random
 import pygame
 
@@ -9,6 +8,8 @@ clock = pygame.time.Clock()
 array_of_borders = []
 array_trail = []
 running = True
+teleport_flag = False
+main_character_photo = pygame.image.load("main_character.png")
 
 
 def check_collision(pos1, pos2):
@@ -82,19 +83,24 @@ class CharacterCreator:
         self.width = width
         self.dirX = 0  # направление по x
         self.dirY = 0  # направление по y
-        self.speed = 6
+        self.speed = 8
         self.forset_x = 0
         self.forset_y = 0
+        self.tp_check_x = True
+        self.tp_check_y = True
 
     def draw_object(self):
         draw_player_trail(self.width)
         square = pygame.Rect(self.position_x - self.width // 2, self.position_y - self.width // 2,
                              self.width, self.width)
         pygame.draw.rect(screen, (28, 217, 34), square, 0)
+        # screen.blit(main_character_photo, (self.position_x - self.width // 2, self.position_y - self.width // 2))
 
     def move(self):
         is_colliding_x = False
         is_colliding_y = False
+        self.tp_check_y = True
+        self.tp_check_x = True
         for i in range(0, len(borders)):
             border = borders[i]
             border_pos = border.pos
@@ -106,6 +112,22 @@ class CharacterCreator:
                                 self.dirX * self.speed, player_pos[3])
             new_player_pos_y = (player_pos[0], player_pos[1] + self.dirY * self.speed, player_pos[2],
                                 player_pos[3] + self.dirY * self.speed)
+
+            teleport_x = self.position_x + self.dirX * self.speed * 7
+            teleport_y = self.position_y + self.dirY * self.speed * 7
+
+            player_pos_teleport = (teleport_x - self.width // 2, teleport_y - self.width // 2, teleport_x +
+                                   self.width // 2, teleport_y + self.width // 2)
+
+            new_player_pos_x_teleport = (player_pos_teleport[0] + self.dirX * self.speed, player_pos_teleport[1],
+                                         player_pos_teleport[2] + self.dirX * self.speed, player_pos_teleport[3])
+            new_player_pos_y_teleport = (player_pos_teleport[0], player_pos_teleport[1] + self.dirY * self.speed,
+                                         player_pos_teleport[2], player_pos_teleport[3] + self.dirY * self.speed)
+
+            if check_collision(border_pos, new_player_pos_x_teleport):
+                self.tp_check_x = False
+            if check_collision(border_pos, new_player_pos_y_teleport):
+                self.tp_check_y = False
 
             # проверяем если в будущем игрок врежитсся в стенку по x и y отдельно
             if is_colliding_x is False and check_collision(border_pos, new_player_pos_x) is True:
@@ -188,8 +210,6 @@ def finish(x, y):
     if 20 <= x <= 100 and 660 <= y <= 900:
         return True
 
-# teleport_flag = False
-
 
 while running:
     clock.tick(60)
@@ -214,13 +234,13 @@ while running:
         elif keys[pygame.K_d]:
             main_character.dirX = 1
 
-    # #телепорт сквозь стену
-    # if (teleport_flag == False and keys[pygame.K_SPACE]):
-    #     teleport_flag = True
-    #     main_character.position_x += main_character.dirX * main_character.speed * 7
-    #     main_character.position_y += main_character.dirY * main_character.speed * 7
-    # if (teleport_flag == True and keys[pygame.K_SPACE] == False):
-    #     teleport_flag = False
+    if keys[pygame.K_SPACE] and teleport_flag is False:
+        teleport_flag = True
+        if main_character.tp_check_x is True and main_character.tp_check_y is True:
+            main_character.position_x += main_character.dirX * main_character.speed * 7
+            main_character.position_y += main_character.dirY * main_character.speed * 7
+    if teleport_flag is True and keys[pygame.K_SPACE] is False:
+        teleport_flag = False
 
     main_character.move()
 
