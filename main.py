@@ -28,44 +28,42 @@ def check_collision(pos1, pos2):
     collision_y = y1 + h1 >= y2 and y2 + h2 >= y1
     return collision_x and collision_y
 
-def generatePlayerTrail(x, y):
+
+def generate_player_trail(x, y):
     global array_trail
+    array_trail.append((x + random.randint(-2, 2), y + random.randint(-2, 2), 0))
 
-    #playerX, playerY, idx (индекс как долго живет частица)
-    array_trail.append((x + random.randint(-2,2), y+ random.randint(-2,2), 0))
 
-def map(value, leftMin, leftMax, rightMin, rightMax):
-    leftSpan = leftMax - leftMin
-    rightSpan = rightMax - rightMin
-    valueScaled = float(value - leftMin) / float(leftSpan)
-    return rightMin + (valueScaled * rightSpan)
+def map_trailing(value, left_min, left_max, right_min, right_max):
+    left_span = left_max - left_min
+    right_span = right_max - right_min
+    value_scaled = float(value - left_min) / float(left_span)
+    return right_min + (value_scaled * right_span)
 
-def drawPlayerTrail(player_size):
+
+def draw_player_trail(player_size):
     global array_trail
-    #длина пояса
     player_trail_live = 9
 
     for i in range(0, len(array_trail)):
-        if (i >= len(array_trail)):
-            # мы убераем елементы .remove и i уменьшается
+        if i >= len(array_trail):
             break
 
         trail = array_trail[i]
-        array_trail[i] = (trail[0], trail[1], trail[2] + 1) #добавляем индекс
+        array_trail[i] = (trail[0], trail[1], trail[2] + 1)  # добавляем индекс
         if trail[2] > player_trail_live:
             array_trail.remove(array_trail[i])
 
         idx = trail[2]
-        # размер партикла
-        size = map(player_trail_live - idx,player_trail_live, 0, player_size*0.9, 0)
-        if (size < 0):
+        size = map_trailing(player_trail_live - idx, player_trail_live, 0, player_size*0.9, 0)
+        if size < 0:
             continue
         # от зеленого до белого
-        color_v = int(map(idx, 0, player_trail_live, 0, 200))
-        if (color_v < 0):
+        color_v = int(map_trailing(idx, 0, player_trail_live, 0, 200))
+        if color_v < 0:
             color_v = 0
-        #прозрачность
-        color_alpha = int(map(idx, 0, player_trail_live, 100, 0))
+        # прозрачность
+        color_alpha = int(map_trailing(idx, 0, player_trail_live, 100, 0))
         color = (color_v, 255, color_v, color_alpha)
 
         center = (trail[0]-size/2, trail[1]-size/2)
@@ -76,20 +74,20 @@ def drawPlayerTrail(player_size):
         pygame.draw.rect(shape_surf, color, (radius, radius, radius, radius))
         screen.blit(shape_surf, target_rect)
 
-        #pygame.draw.rect(screen, color, (trail[0]-size/2, trail[1]-size/2, size, size))
-
 
 class CharacterCreator:
     def __init__(self, start_position, width):
         self.position_x = start_position[0]
         self.position_y = start_position[1]
         self.width = width
-        self.dirX = 0
-        self.dirY = 0
-        self.speed = 10
+        self.dirX = 0  # направление по x
+        self.dirY = 0  # направление по y
+        self.speed = 6
+        self.forset_x = 0
+        self.forset_y = 0
 
     def draw_object(self):
-        drawPlayerTrail(self.width)
+        draw_player_trail(self.width)
         square = pygame.Rect(self.position_x - self.width // 2, self.position_y - self.width // 2,
                              self.width, self.width)
         pygame.draw.rect(screen, (28, 217, 34), square, 0)
@@ -97,8 +95,6 @@ class CharacterCreator:
     def move(self):
         is_colliding_x = False
         is_colliding_y = False
-        forset_x = 0
-        forset_y = 0
         for i in range(0, len(borders)):
             border = borders[i]
             border_pos = border.pos
@@ -114,36 +110,31 @@ class CharacterCreator:
             # проверяем если в будущем игрок врежитсся в стенку по x и y отдельно
             if is_colliding_x is False and check_collision(border_pos, new_player_pos_x) is True:
                 is_colliding_x = True
-                # считаем на сколько надо магнитить кубик к стенке чтоб плотно прилягал
-                # (-1 для того чтоб не застрял в ней)
                 if self.dirX == 1:
-                    forset_x = abs(player_pos[2]-border.pos[0])-1
+                    self.forset_x = abs(player_pos[2]-border.pos[0])-1
                 if self.dirX == -1:
-                    forset_x = abs(player_pos[0] - border.pos[2]) - 1
+                    self.forset_x = abs(player_pos[0] - border.pos[2]) - 1
             if is_colliding_y is False and check_collision(border_pos, new_player_pos_y) is True:
                 is_colliding_y = True
-                # считаем на сколько надо магнитить кубик к стенке чтоб плотно прилягал
-                # (-1 для того чтоб не застрял в ней)
                 if self.dirY == 1:
-                    forset_y = abs(player_pos[3]-border.pos[1]) - 1
+                    self.forset_y = abs(player_pos[3]-border.pos[1]) - 1
                 if self.dirY == -1:
-                    forset_y = abs(player_pos[1] - border.pos[3]) - 1
+                    self.forset_y = abs(player_pos[1] - border.pos[3]) - 1
 
-        # магнитим кубик к стенке чтоб плотно прилягал
+        # forset_y , forset_x для прелигания к стенкам
         if is_colliding_x is False:
             self.position_x += self.dirX * self.speed
         else:
-            if forset_x < self.speed:
-                self.position_x += self.dirX * forset_x
+            if self.forset_x < self.speed:
+                self.position_x += self.dirX * self.forset_x
 
         if is_colliding_y is False:
             self.position_y += self.dirY * self.speed
         else:
-            if forset_y < self.speed:
-                self.position_y += self.dirY * forset_y
+            if self.forset_y < self.speed:
+                self.position_y += self.dirY * self.forset_y
 
-        # След за игроком
-        generatePlayerTrail(self.position_x, self.position_y)
+        generate_player_trail(self.position_x, self.position_y)
 
 
 class BordersCreator:
@@ -161,16 +152,8 @@ class BordersCreator:
         pygame.draw.rect(screen, (59, 59, 59), rectangle, 0)
 
 
-main_character = CharacterCreator([973, 210], 40)
-
-
 def generate_borders():
-    array = [BordersCreator([0, 0], 0, pygame.display.get_window_size()[1]*2),
-             BordersCreator([0, 0], pygame.display.get_window_size()[0]*2, 0),
-             BordersCreator([pygame.display.get_window_size()[0], 0], 0, pygame.display.get_window_size()[1]*2),
-             BordersCreator([0, pygame.display.get_window_size()[1]], pygame.display.get_window_size()[0]*2, 0),
-
-             BordersCreator([10, 340], 20, 680),
+    array = [BordersCreator([10, 340], 20, 680),
              BordersCreator([1030, 340], 20, 680),
              BordersCreator([520, 10], 1040, 20),
              BordersCreator([580, 670], 920, 20),
@@ -192,6 +175,7 @@ def generate_borders():
     return array
 
 
+main_character = CharacterCreator([973, 210], 40)
 borders = generate_borders()
 
 
@@ -214,7 +198,7 @@ while running:
             sys.exit()
 
     keys = pygame.key.get_pressed()
-    if (keys[pygame.K_w] and keys[pygame.K_s]) or (keys[pygame.K_w] == False and keys[pygame.K_s] == False):
+    if (keys[pygame.K_w] and keys[pygame.K_s]) or (keys[pygame.K_w] is False and keys[pygame.K_s] is False):
         main_character.dirY = 0
     else:
         if keys[pygame.K_w]:
@@ -222,7 +206,7 @@ while running:
         elif keys[pygame.K_s]:
             main_character.dirY = 1
 
-    if (keys[pygame.K_a] and keys[pygame.K_d]) or (keys[pygame.K_a] == False and keys[pygame.K_d] == False):
+    if (keys[pygame.K_a] and keys[pygame.K_d]) or (keys[pygame.K_a] is False and keys[pygame.K_d] is False):
         main_character.dirX = 0
     else:
         if keys[pygame.K_a]:
