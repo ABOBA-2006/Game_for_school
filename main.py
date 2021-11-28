@@ -5,11 +5,12 @@ import pygame
 pygame.init()
 screen = pygame.display.set_mode([1040, 680])
 clock = pygame.time.Clock()
-array_of_borders = []
 array_trail = []
 running = True
 teleport_flag = False
-main_character_photo = pygame.image.load("main_character.png")
+
+
+# main_character_photo = pygame.image.load("main_character.png")
 
 
 def check_collision(pos1, pos2):
@@ -56,7 +57,7 @@ def draw_player_trail(player_size):
             array_trail.remove(array_trail[i])
 
         idx = trail[2]
-        size = map_trailing(player_trail_live - idx, player_trail_live, 0, player_size*0.9, 0)
+        size = map_trailing(player_trail_live - idx, player_trail_live, 0, player_size * 0.9, 0)
         if size < 0:
             continue
         # от зеленого до белого
@@ -67,7 +68,7 @@ def draw_player_trail(player_size):
         color_alpha = int(map_trailing(idx, 0, player_trail_live, 100, 0))
         color = (color_v, 255, color_v, color_alpha)
 
-        center = (trail[0]-size/2, trail[1]-size/2)
+        center = (trail[0] - size / 2, trail[1] - size / 2)
         radius = size
         # я скопировал и в душе не ебу как оно меняет прозрачность цвета
         target_rect = pygame.Rect(center, (0, 0)).inflate((radius * 2, radius * 2))
@@ -129,17 +130,22 @@ class CharacterCreator:
             if check_collision(border_pos, new_player_pos_y_teleport):
                 self.tp_check_y = False
 
+            if new_player_pos_x_teleport[0] < 0 or new_player_pos_x_teleport[2] > 1040:
+                self.tp_check_x = False
+            if new_player_pos_y_teleport[1] < 0 or new_player_pos_y_teleport[3] > 680:
+                self.tp_check_y = False
+
             # проверяем если в будущем игрок врежитсся в стенку по x и y отдельно
             if is_colliding_x is False and check_collision(border_pos, new_player_pos_x) is True:
                 is_colliding_x = True
                 if self.dirX == 1:
-                    self.forset_x = abs(player_pos[2]-border.pos[0])-1
+                    self.forset_x = abs(player_pos[2] - border.pos[0]) - 1
                 if self.dirX == -1:
                     self.forset_x = abs(player_pos[0] - border.pos[2]) - 1
             if is_colliding_y is False and check_collision(border_pos, new_player_pos_y) is True:
                 is_colliding_y = True
                 if self.dirY == 1:
-                    self.forset_y = abs(player_pos[3]-border.pos[1]) - 1
+                    self.forset_y = abs(player_pos[3] - border.pos[1]) - 1
                 if self.dirY == -1:
                     self.forset_y = abs(player_pos[1] - border.pos[3]) - 1
 
@@ -157,6 +163,32 @@ class CharacterCreator:
                 self.position_y += self.dirY * self.forset_y
 
         generate_player_trail(self.position_x, self.position_y)
+
+
+class Enemies:
+    def __init__(self, start_position, width, direction_x, direction_y, speed):
+        self.position_x = start_position[0]
+        self.position_y = start_position[1]
+        self.width = width
+        self.height = width
+        self.dirX = direction_x
+        self.dirY = direction_y
+        self.speed = speed
+
+    def draw_object(self):
+        rectangle = pygame.Rect(self.position_x - self.width // 2, self.position_y - self.height // 2,
+                                self.width, self.height)
+        pygame.draw.rect(screen, (255, 0, 0), rectangle, 0)
+
+    def move(self):
+        while self.position_x != self.dirX or self.position_y != self.dirY:
+            self.position_x += self.speed * self.dirX
+
+
+def generate_enemies():
+    array = [Enemies([200, 80], 40, 500, 80, 5)]
+
+    return array
 
 
 class BordersCreator:
@@ -199,11 +231,17 @@ def generate_borders():
 
 main_character = CharacterCreator([973, 210], 40)
 borders = generate_borders()
+enemies_array = generate_enemies()
 
 
 def border_draw():
     for border in borders:
         border.draw_object()
+
+
+def enemies_draw():
+    for enemies in enemies_array:
+        enemies.draw_object()
 
 
 def finish(x, y):
@@ -236,9 +274,13 @@ while running:
 
     if keys[pygame.K_SPACE] and teleport_flag is False:
         teleport_flag = True
-        if main_character.tp_check_x is True and main_character.tp_check_y is True:
-            main_character.position_x += main_character.dirX * main_character.speed * 7
-            main_character.position_y += main_character.dirY * main_character.speed * 7
+        if main_character.dirX != 0:
+            if main_character.tp_check_x is True:
+                main_character.position_x += main_character.dirX * main_character.speed * 7
+        if main_character.dirY != 0:
+            if main_character.tp_check_y is True:
+                main_character.position_y += main_character.dirY * main_character.speed * 7
+
     if teleport_flag is True and keys[pygame.K_SPACE] is False:
         teleport_flag = False
 
@@ -247,6 +289,7 @@ while running:
     screen.fill([99, 99, 99])
     main_character.draw_object()
     border_draw()
+    enemies_draw()
     if finish(main_character.position_x, main_character.position_y):
         running = False
 
