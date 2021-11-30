@@ -42,6 +42,10 @@ while running:
             i2 = event.pos[1] // (global_width_height // 2)
             j2 = event.pos[0] // (global_width_height // 2)
             array[i2][j2] = '1'
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            i2 = event.pos[1] // (global_width_height // 2)
+            j2 = event.pos[0] // (global_width_height // 2)
+            array[i2][j2] = '0'
 
     screen.fill([99, 99, 99])
     draw_array()
