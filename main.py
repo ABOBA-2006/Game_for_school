@@ -176,28 +176,30 @@ class CharacterCreator:
 
 
 class Enemies:
-    def __init__(self, start_position, width, direction_x, direction_y, speed):
+    def __init__(self, start_position, width, direction_x, direction_y, subsequence, speed):
         self.position_x = start_position[0]
         self.position_y = start_position[1]
         self.width = width
         self.height = width
-        if self.position_x < direction_x:
+        if self.position_x < direction_x[0]:
             self.dirX = 1
-        elif self.position_x > direction_x:
+        elif self.position_x > direction_x[0]:
             self.dirX = -1
         else:
             self.dirX = 0
 
-        if self.position_y < direction_y:
+        if self.position_y < direction_y[0]:
             self.dirY = 1
-        elif self.position_y > direction_y:
+        elif self.position_y > direction_y[0]:
             self.dirY = -1
         else:
             self.dirY = 0
-        self.destination_X_start = start_position[0]
-        self.destination_Y_start = start_position[1]
-        self.destination_X = direction_x
-        self.destination_Y = direction_y
+        self.destination_X_direction = direction_x
+        self.destination_Y_direction = direction_y
+        self.destination_X_index = 0
+        self.destination_Y_index = 0
+        self.subsequence = subsequence
+        self.index_subsequence = 0
         self.speed = speed
 
     def draw_object(self):
@@ -207,26 +209,45 @@ class Enemies:
         pygame.draw.rect(screen, (255, 0, 0), rectangle, 0)
 
     def move(self):
-        if self.position_x != self.destination_X:
-            self.position_x += self.speed * self.dirX
-        else:
-            self.dirX *= -1
-            c = self.destination_X
-            self.destination_X = self.destination_X_start
-            self.destination_X_start = c
+        if self.subsequence[self.index_subsequence] == 'X':
+            if self.position_x != self.destination_X_direction[self.destination_X_index]:
+                self.position_x += self.speed * self.dirX
+            else:
+                self.destination_X_index += 1
+                self.index_subsequence += 1
+                if self.index_subsequence == len(self.subsequence):
+                    self.index_subsequence = 0
+                if self.destination_X_index == len(self.destination_X_direction):
+                    self.destination_X_index = 0
+                if self.position_x < self.destination_X_direction[self.destination_X_index]:
+                    self.dirX = 1
+                elif self.position_x > self.destination_X_direction[self.destination_X_index]:
+                    self.dirX = -1
+                else:
+                    self.dirX = 0
 
-        if self.position_y != self.destination_Y:
-            self.position_y += self.speed * self.dirY
-        else:
-            self.dirY *= -1
-            c = self.destination_Y
-            self.destination_Y = self.destination_Y_start
-            self.destination_Y_start = c
+        if self.subsequence[self.index_subsequence] == 'Y':
+            if self.position_y != self.destination_Y_direction[self.destination_Y_index]:
+                self.position_y += self.speed * self.dirY
+            else:
+                self.destination_Y_index += 1
+                self.index_subsequence += 1
+                if self.index_subsequence == len(self.subsequence):
+                    self.index_subsequence = 0
+                if self.destination_Y_index == len(self.destination_Y_direction):
+                    self.destination_Y_index = 0
+                if self.position_y < self.destination_Y_direction[self.destination_Y_index]:
+                    self.dirY = 1
+                elif self.position_y > self.destination_Y_direction[self.destination_Y_index]:
+                    self.dirY = -1
+                else:
+                    self.dirY = 0
 
 
 def generate_enemies():
     if random_map == 0:
-        array = [Enemies([200, 80], 40, 500, 80, 5)]
+        array = [Enemies([200, 80], 40, [500, 200], [80], ['X'], 5),
+                 ]
 
     else:
         array = []
