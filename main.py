@@ -8,6 +8,7 @@ pygame.init()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 screen_width = screen.get_width()
 screen_height = screen.get_height()
+scale_x = screen_width / 1920
 clock = pygame.time.Clock()
 array_trail = []
 running = True
@@ -18,27 +19,39 @@ maps = [[['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', 
         [['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', '0', '0', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1'], ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']]]
 
 random_map = random.randint(0, len(maps) - 1)
-global_width_height = 40
+global_width_height = int(40 * scale_x)
 
 
 background_photo = pygame.image.load("background.png")
+background_photo = pygame.transform.scale(background_photo, ((int(40 * scale_x)), int(40 * scale_x)))
 walls_photo = pygame.image.load("water3.png")
+walls_photo = pygame.transform.scale(walls_photo, ((int(40 * scale_x)), int(40 * scale_x)))
 enemy_photo = pygame.image.load("mini_monster_slug.png")
+enemy_photo = pygame.transform.scale(enemy_photo, ((int(40 * scale_x)), int(40 * scale_x)))
 enemy_photo_right = pygame.image.load("mini_monster_slug_right.png")
+enemy_photo_right = pygame.transform.scale(enemy_photo_right, ((int(40 * scale_x)), int(40 * scale_x)))
 
 
 left_sprite = pygame.image.load("sprite_anton1_left.png")
+left_sprite = pygame.transform.scale(left_sprite, ((int(22 * scale_x)), int(55 * scale_x)))
 right_sprite = pygame.image.load("sprite_anton1.png")
+right_sprite = pygame.transform.scale(right_sprite, ((int(22 * scale_x)), int(55 * scale_x)))
 
 array_left_sprites = [pygame.image.load("sprite_anton2_left.png"), pygame.image.load("sprite_anton3_left.png"),
                       pygame.image.load("sprite_anton3_left.png"), pygame.image.load("sprite_anton4_left.png"),
                       pygame.image.load("sprite_anton5_left.png"), pygame.image.load("sprite_anton6_left.png"),
                       pygame.image.load("sprite_anton7_left.png")]
 
+for k in range(len(array_left_sprites)):
+    array_left_sprites[k] = pygame.transform.scale(array_left_sprites[k], ((int(22 * scale_x)), int(55 * scale_x)))
+
 array_right_sprites = [pygame.image.load("sprite_anton2.png"), pygame.image.load("sprite_anton3.png"),
                        pygame.image.load("sprite_anton3.png"), pygame.image.load("sprite_anton4.png"),
                        pygame.image.load("sprite_anton5.png"), pygame.image.load("sprite_anton6.png"),
                        pygame.image.load("sprite_anton7.png")]
+
+for z in range(len(array_left_sprites)):
+    array_right_sprites[z] = pygame.transform.scale(array_right_sprites[z], ((int(22 * scale_x)), int(55 * scale_x)))
 
 
 def check_collision(pos1, pos2):
@@ -61,7 +74,8 @@ def check_collision(pos1, pos2):
 
 def generate_player_trail(x, y):
     global array_trail
-    array_trail.append((x + random.randint(-2, 2), y + random.randint(-2, 2), 0))
+    if len(array_trail) == 0 or array_trail[len(array_trail) - 1][2] > 1:
+        array_trail.append((x + random.randint(-3, 3), y + random.randint(-3, 3), 0))
 
 
 def map_trailing(value, left_min, left_max, right_min, right_max):
@@ -73,7 +87,7 @@ def map_trailing(value, left_min, left_max, right_min, right_max):
 
 def draw_player_trail(player_size):
     global array_trail
-    player_trail_live = 9
+    player_trail_live = 15
 
     for i in range(0, len(array_trail)):
         if i >= len(array_trail):
@@ -85,23 +99,24 @@ def draw_player_trail(player_size):
             array_trail.remove(array_trail[i])
 
         idx = trail[2]
-        size = map_trailing(player_trail_live - idx, player_trail_live, 0, player_size * 0.9, 0)
+        size = map_trailing(player_trail_live - idx, player_trail_live, 0, player_size * 0.4, 0)
         if size < 0:
             continue
         # от зеленого до белого
-        color_v = int(map_trailing(idx, 0, player_trail_live, 0, 200))
+        color_v = int(map_trailing(idx, 0, player_trail_live, 255, 255))
         if color_v < 0:
             color_v = 0
         # прозрачность
-        color_alpha = int(map_trailing(idx, 0, player_trail_live, 100, 0))
-        color = (color_v, 255, color_v, color_alpha)
+        color_alpha = int(map_trailing(idx, 0, player_trail_live, 150, 0))
+        color = (color_v, color_v, color_v, color_alpha)
 
-        center = (trail[0] - size / 2, trail[1] - size / 2)
+        center = (trail[0], trail[1] - size / 2 + main_character.height/2 - 7)
         radius = size
         # я скопировал и в душе не ебу как оно меняет прозрачность цвета
         target_rect = pygame.Rect(center, (0, 0)).inflate((radius * 2, radius * 2))
         shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
-        pygame.draw.rect(shape_surf, color, (radius, radius, radius, radius))
+        # pygame.draw.rect(shape_surf, color, (radius, radius, radius, radius))
+        pygame.draw.circle(shape_surf, color, (radius, radius), radius/2)
         screen.blit(shape_surf, target_rect)
 
 
@@ -114,7 +129,7 @@ class CharacterCreator:
         self.dirX = 0  # направление по x
         self.dirY = 0  # направление по y
         self.dirX_last = 1
-        self.speed = 10
+        self.speed = int(10 * scale_x)
         self.forset_x = 0
         self.forset_y = 0
         self.tp_check_x = True
@@ -150,7 +165,6 @@ class CharacterCreator:
             screen.blit(array_right_sprites[self.animation // 5], pos)
         if self.dirX == -1:
             screen.blit(array_left_sprites[self.animation // 5], pos)
-        # screen.blit(main_character_photo, (self.position_x - self.width // 2, self.position_y - self.width // 2))
 
     def move(self):
         is_colliding_x = False
@@ -213,6 +227,16 @@ class CharacterCreator:
                 if self.dirY == -1:
                     self.forset_y = 0
 
+        if random_map == 0:
+            if int(40 * scale_x) <= self.position_x <= int(120 * scale_x) and int(1040 * scale_x) <= self.position_y <= int(1200 * scale_x) and self.dirY == 1:
+                is_colliding_y = True
+        if random_map == 1:
+            if int(800 * scale_x) <= self.position_x <= int(1200 * scale_x) and int(1040 * scale_x) <= self.position_y <= int(1200 * scale_x) and self.dirY == 1:
+                is_colliding_y = True
+        if random_map == 2:
+            if int(800 * scale_x) <= self.position_x <= int(1200 * scale_x) and int(-200 * scale_x) <= self.position_y <= int(40 * scale_x) and self.dirY == -1:
+                is_colliding_y = True
+
         # forset_y , forset_x для прелигания к стенкам
         if is_colliding_x is False:
             self.position_x += self.dirX * self.speed
@@ -226,7 +250,8 @@ class CharacterCreator:
             if self.forset_y < self.speed:
                 self.position_y += self.dirY * self.forset_y
 
-        # generate_player_trail(self.position_x, self.position_y)
+        if (self.dirX != 0 or self.dirY != 0) and not is_colliding_y and not is_colliding_x and not is_colliding_xy:
+            generate_player_trail(self.position_x, self.position_y)
 
 
 class Enemy:
@@ -289,6 +314,11 @@ class Enemy:
                     forset_y = 0
                 if self.dirY == -1:
                     forset_y = 0
+
+        if random_map == 2:
+            if int(800 * scale_x) <= self.x <= int(1200 * scale_x) and int(-200 * scale_x) <= self.y <= int(40 * scale_x):
+                self.dirX *= -1
+                self.dirY *= -1
 
         # forset_y , forset_x для прелигания к стенкам
         if is_colliding_x is False:
@@ -416,25 +446,25 @@ class Enemies:
 
 def generate_enemies(speed_increase):
     if random_map == 0:
-        array = [Enemies([200, 80], 40, [500, 200], [80], ['X'], 5 + speed_increase),
-                 Enemies([1720, 650], 40, [1600, 1720], [320, 400, 650], ['Y', 'X', 'Y', 'X', 'Y'], 5 + speed_increase),
-                 Enemies([200, 200], 40, [320, 440, 600, 200], [650, 200, 650, 200], ['Y', 'X'], 5 + speed_increase),
-                 Enemies([1180, 610], 40, [1580, 1180, 1580, 1180], [720, 840, 1000, 610], ['Y', 'X'], 5 + speed_increase),
-                 Enemies([200, 1000], 40, [300, 540, 740, 820, 200], [820, 1000, 670, 1000], ['X', 'X-Y', 'X-Y', 'X', 'Y', 'X', 'Y'], 5 + speed_increase),
-                 Enemies([1480, 150], 40, [1050, 1350, 1050, 1480], [360, 480, 150], ['Y', 'X', 'X', 'Y', 'X', 'X', 'Y'], 5 + speed_increase),
+        array = [Enemies([int(200 * scale_x), int(80 * scale_x)], int(40 * scale_x), [int(500 * scale_x), int(200 * scale_x)], [int(80 * scale_x)], ['X'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(1720 * scale_x), int(650 * scale_x)], int(40 * scale_x), [int(1600 * scale_x), int(1720 * scale_x)], [int(320 * scale_x), int(400 * scale_x), int(650 * scale_x)], ['Y', 'X', 'Y', 'X', 'Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(200 * scale_x), int(200 * scale_x)], int(40 * scale_x), [int(320 * scale_x), int(440 * scale_x), int(600 * scale_x), int(200 * scale_x)], [int(650 * scale_x), int(200 * scale_x), int(650 * scale_x), int(200 * scale_x)], ['Y', 'X'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(1180 * scale_x), int(610 * scale_x)], int(40 * scale_x), [int(1580 * scale_x), int(1180 * scale_x), int(1580 * scale_x), int(1180 * scale_x)], [int(720 * scale_x), int(840 * scale_x), int(1000 * scale_x), int(610 * scale_x)], ['Y', 'X'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(200 * scale_x), int(1000 * scale_x)], int(40 * scale_x), [int(300 * scale_x), int(540 * scale_x), int(740 * scale_x), int(820 * scale_x), int(200 * scale_x)], [int(820 * scale_x), int(1000 * scale_x), int(670 * scale_x), int(1000 * scale_x)], ['X', 'X-Y', 'X-Y', 'X', 'Y', 'X', 'Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(1480 * scale_x), int(150 * scale_x)], int(40 * scale_x), [int(1050 * scale_x), int(1350 * scale_x), int(1050 * scale_x), int(1480 * scale_x)], [int(360 * scale_x), int(480 * scale_x), int(150 * scale_x)], ['Y', 'X', 'X', 'Y', 'X', 'X', 'Y'], int((5 + speed_increase) * scale_x)),
                  ]
     elif random_map == 1:
-        array = [Enemies([1760, 1000], 40, [1460, 1200, 1500, 1200, 1460, 1760], [700, 1000, 700, 1000], ['X-Y', 'X', 'X-Y'], 5 + speed_increase),
-                 Enemies([160, 1000], 40, [460, 720, 420, 720, 460, 160], [700, 1000, 700, 1000], ['X-Y', 'X', 'X-Y'], 5 + speed_increase),
-                 Enemies([760, 400], 40, [1160, 760], [710, 400], ['X', 'Y'], 5 + speed_increase),
-                 Enemies([1160, 710], 40, [760, 1160], [400, 710], ['X', 'Y'], 5 + speed_increase),
-                 Enemies([80, 90], 40, [480, 780, 480, 80], [320, 120, 280, 120, 320, 90], ['Y', 'X', 'Y', 'X', 'Y', 'Y', 'X', 'Y', 'X', 'Y'], 5 + speed_increase),
-                 Enemies([1840, 90], 40, [1440, 1140, 1440, 1840], [320, 120, 280, 120, 320, 90], ['Y', 'X', 'Y', 'X', 'Y', 'Y', 'X', 'Y', 'X', 'Y'], 5 + speed_increase),
+        array = [Enemies([int(1760 * scale_x), int(1000 * scale_x)], int(40 * scale_x), [int(1460 * scale_x), int(1200 * scale_x), int(1500 * scale_x), int(1200 * scale_x), int(1460 * scale_x), int(1760 * scale_x)], [int(700 * scale_x), int(1000 * scale_x), int(700 * scale_x), int(1000 * scale_x)], ['X-Y', 'X', 'X-Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(160 * scale_x), int(1000 * scale_x)], int(40 * scale_x), [int(460 * scale_x), int(720 * scale_x), int(420 * scale_x), int(720 * scale_x), int(460 * scale_x), int(160 * scale_x)], [int(700 * scale_x), int(1000 * scale_x), int(700 * scale_x), int(1000 * scale_x)], ['X-Y', 'X', 'X-Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(760 * scale_x), int(400 * scale_x)], int(40 * scale_x), [int(1160 * scale_x), int(760 * scale_x)], [int(710 * scale_x), int(400 * scale_x)], ['X', 'Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(1160 * scale_x), int(710 * scale_x)], int(40 * scale_x), [int(760 * scale_x), int(1160 * scale_x)], [int(400 * scale_x), int(710 * scale_x)], ['X', 'Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(80 * scale_x), int(90 * scale_x)], int(40 * scale_x), [int(480 * scale_x), int(780 * scale_x), int(480 * scale_x), int(80 * scale_x)], [int(320 * scale_x), int(120 * scale_x), int(280 * scale_x), int(120 * scale_x), int(320 * scale_x), int(90 * scale_x)], ['Y', 'X', 'Y', 'X', 'Y', 'Y', 'X', 'Y', 'X', 'Y'], int((5 + speed_increase) * scale_x)),
+                 Enemies([int(1840 * scale_x), int(90 * scale_x)], int(40 * scale_x), [int(1440 * scale_x), int(1140 * scale_x), int(1440 * scale_x), int(1840 * scale_x)], [int(320 * scale_x), int(120 * scale_x), int(280 * scale_x), int(120 * scale_x), int(320 * scale_x), int(90 * scale_x)], ['Y', 'X', 'Y', 'X', 'Y', 'Y', 'X', 'Y', 'X', 'Y'], int((5 + speed_increase) * scale_x)),
                  ]
     elif random_map == 2:
         array = []
         for i in range(20):
-            array.append(Enemy(random.randint(80, 1840), random.randint(80, 940), 40, 5 + speed_increase))
+            array.append(Enemy(random.randint(int(80 * scale_x), int(1840 * scale_x)), random.randint(int(80 * scale_x), int(940 * scale_x)), int(40 * scale_x), int((5 + speed_increase) * scale_x)))
     else:
         array = []
     return array
@@ -457,8 +487,8 @@ class BordersCreator:
 
 def generate_borders():
     array = []
-    for i in range(screen_height // global_width_height):
-        for j in range(screen_width // global_width_height):
+    for i in range(27):
+        for j in range(48):
             if maps[random_map][i][j] == '1':
                 array.append(BordersCreator([j * global_width_height + global_width_height // 2,
                                              i * global_width_height + global_width_height // 2],
@@ -468,11 +498,11 @@ def generate_borders():
 
 
 if random_map == 0:
-    main_character = CharacterCreator([1670, 200], 24, 54)
+    main_character = CharacterCreator([int(1670 * scale_x), int(200 * scale_x)], int(24 * scale_x), int(54 * scale_x))
 elif random_map == 1:
-    main_character = CharacterCreator([960, 100], 24, 54)
+    main_character = CharacterCreator([int(960 * scale_x), int(100 * scale_x)], int(24 * scale_x), int(54 * scale_x))
 elif random_map == 2:
-    main_character = CharacterCreator([960, 540], 24, 54)
+    main_character = CharacterCreator([int(960 * scale_x), int(540 * scale_x)], int(24 * scale_x), int(54 * scale_x))
 else:
     main_character = None
 borders = generate_borders()
@@ -495,8 +525,8 @@ def enemies_draw():
 
 def background_draw():
     array = maps[random_map]
-    for i1 in range(screen_height // global_width_height):
-        for j1 in range(screen_width // global_width_height):
+    for i1 in range(27):
+        for j1 in range(48):
             if array[i1][j1] == '0':
                 screen.blit(background_photo, (j1 * global_width_height, i1 * global_width_height))
             if array[i1][j1] == '1':
@@ -509,10 +539,13 @@ def background_draw():
 def finish(x, y):
     if len(enemies_array) == 0:
         if random_map == 0:
-            if 40 <= x <= 120 and 1040 <= y <= 1200:
+            if int(40 * scale_x) <= x <= int(120 * scale_x) and int(1040 * scale_x) <= y <= int(1200 * scale_x):
                 return True
         if random_map == 1:
-            if 800 <= x <= 1200 and 1040 <= y <= 1200:
+            if int(800 * scale_x) <= x <= int(1200 * scale_x) and int(1040 * scale_x) <= y <= int(1200 * scale_x):
+                return True
+        if random_map == 2:
+            if int(800 * scale_x) <= x <= int(1200 * scale_x) and int(-200 * scale_x) <= y <= int(40 * scale_x):
                 return True
 
 
@@ -577,11 +610,9 @@ while running:
     for enemies1 in enemies_array:
         enemies1.move()
 
-    # screen.fill([99, 99, 99])
-    # screen.blit(main_character_photo, (self.position_x - self.width // 2, self.position_y - self.width // 2))
+    # screen.fill([43, 237, 237])
     background_draw()
     main_character.draw_object()
-    # border_draw()
     enemies_draw()
     if main_character.dirX != 0:
         main_character.dirX_last = main_character.dirX
@@ -591,13 +622,13 @@ while running:
         borders = generate_borders()
         enemies_array = generate_enemies(passed_levels_count * 2)
         if random_map == 0:
-            main_character.position_x = 1670
-            main_character.position_y = 200
+            main_character.position_x = int(1670 * scale_x)
+            main_character.position_y = int(200 * scale_x)
         if random_map == 1:
-            main_character.position_x = 960
-            main_character.position_y = 100
+            main_character.position_x = int(960 * scale_x)
+            main_character.position_y = int(100 * scale_x)
         if random_map == 2:
-            main_character.position_x = 960
-            main_character.position_y = 540
+            main_character.position_x = int(960 * scale_x)
+            main_character.position_y = int(540 * scale_x)
 
     pygame.display.update()
